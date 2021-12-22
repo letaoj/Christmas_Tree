@@ -1,9 +1,12 @@
 # Christmas Tree
+
 A project to create a lighting Christmas Tree
 
-# How to run it
+## How to run it
+
 ```bash
-python tree.py
+pip3 install playsound
+python3 tree.py
 ```
 
 Note: Your python version must be greater than 3.3, otherwise, you will be prompt with `an unexpected keyword argument 'daemon'`
