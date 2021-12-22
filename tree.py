@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import threading
-import random
-import os
-import time
+from threading import Lock, Thread
+from random import uniform
+from os import system, name
+from time import sleep
+from playsound import playsound
 
 class ChristmasTree:
     def __init__(self):
         # read input from tree.txt and convert to a list
         with open('tree.txt', 'r') as input:
             self.tree = list(input.read().rstrip())
-        self.mutex = threading.Lock()
+        self.mutex = Lock()
         self.populate_colors()
 
     def colored_dot(self, color):
@@ -29,13 +30,13 @@ class ChristmasTree:
                 self.tree[idx] = self.colored_dot(color) if off else '●'
 
             self.mutex.acquire()
-            os.system('cls' if os.name == 'nt' else 'clear')
+            system('cls' if name == 'nt' else 'clear')
             print(''.join(self.tree))
             self.mutex.release()
 
             off = not off
 
-            time.sleep(random.uniform(.5, 1.5))
+            sleep(uniform(.5, 1.5))
 
     def populate_colors(self):
         self.yellow = []
@@ -60,10 +61,12 @@ class ChristmasTree:
 def main():
     christmas_tree = ChristmasTree()
 
-    ty = threading.Thread(target=christmas_tree.lights, args=('yellow', christmas_tree.yellow), daemon=True)
-    tr = threading.Thread(target=christmas_tree.lights, args=('red', christmas_tree.red), daemon=True)
-    tg = threading.Thread(target=christmas_tree.lights, args=('green', christmas_tree.green), daemon=True)
-    tb = threading.Thread(target=christmas_tree.lights, args=('blue', christmas_tree.blue), daemon=True)
+    ty = Thread(target=christmas_tree.lights, args=('yellow', christmas_tree.yellow), daemon=True)
+    tr = Thread(target=christmas_tree.lights, args=('red', christmas_tree.red), daemon=True)
+    tg = Thread(target=christmas_tree.lights, args=('green', christmas_tree.green), daemon=True)
+    tb = Thread(target=christmas_tree.lights, args=('blue', christmas_tree.blue), daemon=True)
+    
+    playsound("tree_music.mp3")
 
     for t in [ty, tr, tg, tb]:
         t.start()
