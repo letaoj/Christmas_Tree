@@ -1,6 +1,6 @@
 # Christmas Tree
 
-A project to create a lighting Christmas Tree
+A project to create a lighting Christmas Tree, enlightened by https://github.com/engineer-man/youtube
 
 ## How to run it
 
