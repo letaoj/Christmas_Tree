@@ -5,7 +5,7 @@ A project to create a lighting Christmas Tree, enlightened by https://github.com
 ## How to run it
 
 ```bash
-pip3 install playsound
+pip3 install playsound PyObjc
 python3 tree.py
 ```
 
