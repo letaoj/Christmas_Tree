@@ -65,8 +65,8 @@ def main():
     tr = Thread(target=christmas_tree.lights, args=('red', christmas_tree.red), daemon=True)
     tg = Thread(target=christmas_tree.lights, args=('green', christmas_tree.green), daemon=True)
     tb = Thread(target=christmas_tree.lights, args=('blue', christmas_tree.blue), daemon=True)
+    playsound("Jingle_Bells.mp3", False)
     
-    playsound("tree_music.mp3")
 
     for t in [ty, tr, tg, tb]:
         t.start()
