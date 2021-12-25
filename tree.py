@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from threading import Lock, Thread
-from random import uniform
+from random import choice, uniform
 from os import system, name
 from time import sleep
 from playsound import playsound
@@ -57,6 +57,47 @@ class ChristmasTree:
             if c == 'B':
                 self.blue.append(i)
                 self.tree[i] = '⏺'
+
+class Snowflake:
+    def __init__(self):
+        self.snowflakes = {}
+        self.rows, self.columns = 100, 100
+
+    def get_random_flake():
+        flake=chr(choice(range(0x2740, 0x2749)))
+        return flake
+
+    def move_flake(self, col):
+        if self.snowflakes[col][0]+1 == self.rows:
+            self.snowflakes[col] = [1, self.get_random_flake()]
+        else:
+            print('\033[%s;%sH ' % (self.snowflakes[col][0], col))
+
+            self.snowflakes[col][0] += 1
+            print(u"\033[%s;%sH%s" % (self.snowflakes[col][0], col,
+                    self.snowflakes[col][1]))
+            print("\033[1;1H")
+
+    def run(self):
+        while True:
+            col = choice(range(1, int(self.columns)))
+
+            # its already on the screen, move it
+            if col in self.snowflakes.keys():
+                self.move_flake(col)
+            else:
+            # otherwise put it on the screen
+                flake = self.get_random_flake()
+                self.snowflakes[col] = [1, flake]
+
+                print("\033[%s;%sH%s" % (self.snowflakes[col][0], col,
+                        self.snowflakes[col][1]))
+
+            # key any flakes on the screen moving
+            for flake in self.snowflakes.keys():
+                self.move_flake(flake)
+
+            sleep(0.1)
 
 def main():
     christmas_tree = ChristmasTree()
