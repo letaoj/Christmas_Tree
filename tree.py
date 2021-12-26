@@ -42,20 +42,21 @@ class ChristmasTree:
             sleep(uniform(.5, 1.5))
     
     def move_flake(self):
-        while True:
-            generate = False
-            # generate new flakes at the top
-            if generate:
-                for idx in self.top:
-                    self.tree[idx] = self.get_random_flake() if bool(getrandbits(1)) else ' '
-            generate = not generate
+        generate = False
 
+        while True:
             # moving all flakes
             for idx in reversed(self.flake):
                 if self.tree[idx] != ' ' and idx + 27 < len(self.tree) and self.tree[idx + 27] == ' ':
                     self.tree[idx + 27] = self.tree[idx]
                 self.tree[idx] = ' '
             
+            # generate new flakes at the top
+            if generate:
+                for idx in self.top:
+                    self.tree[idx] = self.get_random_flake() if bool(getrandbits(1)) else ' '
+            generate = not generate
+
             # print the tree
             self.mutex.acquire()
             system('cls' if name == 'nt' else 'clear')
