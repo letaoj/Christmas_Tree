@@ -33,6 +33,7 @@ class ChristmasTree:
                     self.tree[idx] = self.colored_dot(color) if bool(getrandbits(1)) else '●'
             self.mutex.acquire()
             system('cls' if name == 'nt' else 'clear')
+            print("Merry Christmas, Chengjin!\n")
             print(''.join(self.tree))
             self.mutex.release()
 
@@ -40,12 +41,25 @@ class ChristmasTree:
             
             sleep(uniform(.5, 1.5))
     
-    def move_flake(self, indexes):
+    def move_flake(self):
         while True:
-            for idx in indexes:
-                self.tree[idx] = self.get_random_flake() if bool(getrandbits(1)) else ' '
+            generate = False
+            # generate new flakes at the top
+            if generate:
+                for idx in self.top:
+                    self.tree[idx] = self.get_random_flake() if bool(getrandbits(1)) else ' '
+            generate = not generate
+
+            # moving all flakes
+            for idx in reversed(self.flake):
+                if self.tree[idx] != ' ' and idx + 27 < len(self.tree) and self.tree[idx + 27] == ' ':
+                    self.tree[idx + 27] = self.tree[idx]
+                self.tree[idx] = ' '
+            
+            # print the tree
             self.mutex.acquire()
             system('cls' if name == 'nt' else 'clear')
+            print("Merry Christmas, Chengjin!\n")
             print(''.join(self.tree))
             self.mutex.release()
             
@@ -57,6 +71,7 @@ class ChristmasTree:
         self.green = []
         self.blue = []
         self.flake = []
+        self.top = []
 
         for i, c in enumerate(self.tree):
             if c == 'Y':
@@ -72,9 +87,10 @@ class ChristmasTree:
                 self.blue.append(i)
                 self.tree[i] = '●'
             if c == ' ':
+                if i < 26:
+                    self.top.append(i)
+                    self.tree[i] = self.get_random_flake() if bool(getrandbits(1)) else ' '
                 self.flake.append(i)
-                self.tree[i] = self.get_random_flake() if bool(getrandbits(1)) else ' '
-
     def get_random_flake(self):
         flake=chr(choice(range(0x2740, 0x2749)))
         return flake
@@ -127,9 +143,8 @@ def main():
     tr = Thread(target=christmas_tree.lights, args=('red', christmas_tree.red), daemon=True)
     tg = Thread(target=christmas_tree.lights, args=('green', christmas_tree.green), daemon=True)
     tb = Thread(target=christmas_tree.lights, args=('blue', christmas_tree.blue), daemon=True)
-    sf = Thread(target=christmas_tree.move_flake, args=(christmas_tree.flake), daemon=True)
+    sf = Thread(target=christmas_tree.move_flake, daemon=True)
     playsound("Jingle_Bells.mp3", False)
-    
 
     for t in [ty, tr, tg, tb, sf]:
         t.start()
