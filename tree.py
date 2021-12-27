@@ -54,7 +54,7 @@ class ChristmasTree:
             # generate new flakes at the top
             if generate:
                 for idx in self.top:
-                    self.tree[idx] = self.get_random_flake() if bool(getrandbits(1)) else ' '
+                    self.tree[idx] = self.get_snowflake() if bool(getrandbits(1)) else ' '
             generate = not generate
 
             # print the tree
@@ -90,8 +90,10 @@ class ChristmasTree:
             if c == ' ':
                 if i < 26:
                     self.top.append(i)
-                    self.tree[i] = self.get_random_flake() if bool(getrandbits(1)) else ' '
+                    self.tree[i] = self.get_snowflake() if bool(getrandbits(1)) else ' '
                 self.flake.append(i)
+    def get_snowflake(self):
+        return '❄️'
     def get_random_flake(self):
         flake=chr(choice(range(0x2740, 0x2749)))
         return flake
